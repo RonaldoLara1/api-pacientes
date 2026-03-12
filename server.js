@@ -16,6 +16,21 @@ app.get('/pacientes', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener los datos' });
   }
 });
+app.post('/pacientes', async (req, res) => {
+  try {
+    const { nombre, edad } = req.body;
+    const pool = await getConnection();
+    await pool.request()
+      .input('nombre', sql.VarChar, nombre)
+      .input('edad', sql.Int, edad)
+      .query('INSERT INTO Pacientes (nombre, edad) VALUES (@nombre, @edad)');
+    res.status(201).json({ message: 'Paciente agregado correctamente' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al agregar paciente' });
+  }
+});
+
 
 
 const PORT = process.env.PORT || 3000;
