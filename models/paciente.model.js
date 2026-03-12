@@ -1,7 +1,7 @@
 class Paciente {
   constructor(nombre, edad) {
     this.nombre = nombre;
-    this.correo = edad;
+    this.edad = edad;
   }
 }
 
