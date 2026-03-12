@@ -45,6 +45,46 @@ app.delete('/pacientes/:id', async (req, res) => {
   }
 });
 
+app.get('/doctores', async (req, res) => {
+  try {
+    const pool = await getConnection();
+    const result = await pool.request().query('SELECT * FROM Doctores');
+    res.json(result.recordset);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al obtener doctores' });
+  }
+});
+
+app.post('/doctores', async (req, res) => {
+  try {
+    const { nombre, especialidad, correoElectronico } = req.body;
+    const pool = await getConnection();
+    await pool.request()
+      .input('nombre', sql.VarChar, nombre)
+      .input('especialidad', sql.VarChar, especialidad)
+      .input('correoElectronico', sql.VarChar, correoElectronico)
+      .query('INSERT INTO Doctores (nombre, especialidad, correoElectronico) VALUES (@nombre, @especialidad, @correoElectronico)');
+    res.status(201).json({ message: 'Doctor agregado correctamente' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al agregar doctor' });
+  }
+});
+
+app.delete('/doctores/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pool = await getConnection();
+    await pool.request()
+      .input('id', sql.Int, id)
+      .query('DELETE FROM Doctores WHERE id = @id');
+    res.json({ message: 'Doctor eliminado correctamente' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al eliminar doctor' });
+  }
+});
 
 
 
