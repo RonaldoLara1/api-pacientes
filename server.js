@@ -30,6 +30,21 @@ app.post('/pacientes', async (req, res) => {
     res.status(500).json({ error: 'Error al agregar paciente' });
   }
 });
+app.delete('/pacientes/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pool = await getConnection();
+    await pool.request()
+      .input('id', sql.Int, id)
+      .query('DELETE FROM Pacientes WHERE id = @id');
+
+    res.json({ message: 'Paciente eliminado correctamente' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error al eliminar paciente' });
+  }
+});
+
 
 
 

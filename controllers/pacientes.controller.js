@@ -1,5 +1,22 @@
 const { getConnection, sql } = require('../config/db');
 
+// Crear paciente
+exports.createPaciente = async (req, res) => {
+  const { nombre, edad } = req.body;
+
+  try {
+    const pool = await getConnection();
+    await pool.request()
+      .input("nombre", sql.VarChar, nombre)
+      .input("edad", sql.Int, edad)
+      .query("INSERT INTO pacientes (nombre, edad) VALUES (@nombre, @edad)");
+
+    res.status(201).json({ message: "Paciente agregado correctamente" });
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
 // Obtener todos los pacientes (ya lo tienes)
 exports.getPacientes = async (req, res) => {
   try {
@@ -30,7 +47,6 @@ exports.updatePaciente = async (req, res) => {
   }
 };
 
-// Eliminar paciente
 exports.deletePaciente = async (req, res) => {
   const { id } = req.params;
 

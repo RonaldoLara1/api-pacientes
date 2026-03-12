@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const controller = require('../controllers/pacientes.controller');
+const pacientesController = require('../controllers/pacientesController');
 
-http.get("https://api-pacientes-production.up.railway.app/pacientes")
+router.get('/pacientes', pacientesController.getPacientes);
+router.post('/pacientes', pacientesController.createPaciente);
+router.put('/pacientes/:id', pacientesController.updatePaciente);
+router.delete('/pacientes/:id', pacientesController.deletePaciente);
+
 module.exports = router;
