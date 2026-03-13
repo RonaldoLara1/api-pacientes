@@ -48,7 +48,7 @@ app.delete('/pacientes/:id', async (req, res) => {
 app.get('/doctores', async (req, res) => {
   try {
     const pool = await getConnection();
-    const result = await pool.request().query('SELECT * FROM Doctores');
+    const result = await pool.request().query('SELECT * FROM doctores');
     res.json(result.recordset);
   } catch (err) {
     console.error(err);
@@ -78,7 +78,7 @@ app.delete('/doctores/:id', async (req, res) => {
     const pool = await getConnection();
     await pool.request()
       .input('id', sql.Int, id)
-      .query('DELETE FROM Doctores WHERE id = @id');
+      .query('DELETE FROM doctores WHERE id = @id');
     res.json({ message: 'Doctor eliminado correctamente' });
   } catch (err) {
     console.error(err);
